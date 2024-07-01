@@ -8,7 +8,6 @@ const courses = [
 
 const students = [{ name: 'Eva', dni: '12T', course: 'web' },
 { name: 'Esteban', dni: '1222d', course: 'Web' },
-{ name: 'Esteban', dni: '1222d', course: 'Web' },
 { name: 'Maria', dni: '111J', course: 'Web' }];
 
 console.log(__dirname);
@@ -27,6 +26,18 @@ app.use(express.static('public'));
 
 // nos gustaría que también gestionaras los datos de tipo JSON (entre ellos los POST que nos lleguen)
 app.use(express.urlencoded({ extended: true }));  // Middleware para parsear datos de formularios
+
+app.use((req, res, next) => {
+    // LA variable next sirve para permitir que la petición del cliente continue por la tabla de endpoints
+    // Es lo que usa morgan para no "quedarse" con la petición del cliente simplemente mostrar algo por consola y dejarla continuar
+    // Voy a crear un "morgan"
+    console.log('Petición recibida del cliente.');
+    console.log('Petición tipo: ' + req.method);
+    console.log('Endpoint: ' + req.url);
+
+    // permitir que la petición del cliente continue por la tabla de rutas
+    next();
+})
 
 
 // Usamos el objeto app para crear un nuevo endpoint
@@ -93,6 +104,11 @@ app.post('/signup', (req, res) => {
     students.push(req.body);
     console.log("🚀 ~ file: app.js:54 ~ app.post ~ students:", students)
     res.send(`Gracias por inscribirte al curso. Actualmente hay ${students.length} inscritos`);
+});
+
+// 404
+app.use((req, res) => {
+    res.status(404).send('404 recurso no encontrado.');
 });
 
 
