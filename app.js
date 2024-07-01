@@ -14,9 +14,13 @@ const students = [{ name: 'Eva', dni: '12T', course: 'web' },
 console.log(__dirname);
 // Importar el paquete de terceros que acabamos de instalar. Fijaos que como se encuentra en la carpeta node_modules NO hace falta especificar ninguna ruta (al igual que pasa con los built-in modules)
 const express = require('express');
+const logger = require('morgan');
 
 // Es generarme un objeto para gestionar el enrutamiento y otros aspectos de la aplicación
 const app = express();
+
+// Añadimos el middleware de morgan para loguear todas las peticiones que haga un cliente
+app.use(logger('dev'));
 
 // Usa la carpeta 'public' para ofrecer sus recursos a cualquier clietne de forma pública. Esto es, que si me hacen un GET a cualquier archivo de esa carpeta , aceptalo
 app.use(express.static('public'));
